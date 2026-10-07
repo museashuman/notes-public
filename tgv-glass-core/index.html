@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0b1620" />
+  <link rel="icon" href="data:," />
+  <title>TGV 玻璃基板筆記</title>
+  <style>
+    :root{
+      color-scheme:light dark;
+      --bg:#edf4f5;--paper:#f8fbfb;--ink:#101b21;--muted:#53646d;--line:#bfd0d3;
+      --navy:#0b1620;--navy2:#152836;--cyan:#00a6b2;--cyan2:#a9f0ef;--orange:#e56a34;
+      --green:#238b63;--yellow:#b98812;--red:#b64136;--soft:#e3eef0;--shadow:0 12px 38px rgba(19,49,59,.10);
+      --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+      --sans:"IBM Plex Sans TC","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{--bg:#081117;--paper:#0e1c24;--ink:#e6f1f2;--muted:#a4b8bf;--line:#28414a;--navy:#050b10;--navy2:#0d202b;--cyan:#4ed4d6;--cyan2:#123c43;--orange:#ff8a56;--green:#5bd09b;--yellow:#e5bf56;--red:#ff7f73;--soft:#142832;--shadow:0 12px 38px rgba(0,0,0,.34)}
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:74px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.72}
+    a{color:inherit}
+    button{font:inherit}
+    .progress{position:fixed;z-index:20;inset:0 0 auto;height:3px;background:transparent}
+    .progress span{display:block;height:100%;width:0;background:var(--orange)}
+    .topbar{position:sticky;top:0;z-index:15;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .topbar-inner{max-width:1260px;margin:auto;padding:10px 28px;display:flex;gap:8px;align-items:center;overflow:auto;scrollbar-width:none}
+    .topbar-inner::-webkit-scrollbar{display:none}
+    .navlink{border:0;background:transparent;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:4px;white-space:nowrap;font-size:.88rem;cursor:pointer}
+    .navlink:hover,.navlink.active{color:var(--ink);background:var(--soft)}
+    .navlink.active{box-shadow:inset 0 -2px var(--cyan)}
+    main{max-width:1260px;margin:auto;padding:34px 28px 80px}
+    .hero{background:var(--navy);color:#edfafa;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);min-height:510px;overflow:hidden;box-shadow:var(--shadow)}
+    .hero-copy{padding:58px 58px 42px;align-self:center}
+    .issue{display:flex;align-items:center;gap:10px;font-size:.78rem;letter-spacing:.08em;color:#93b5c1;margin-bottom:24px}
+    .issue::before{content:"";width:28px;height:2px;background:#39c9cf}
+    h1,h2,h3{font-family:var(--serif);font-weight:700;letter-spacing:.015em}
+    h1{font-size:clamp(2.45rem,5.8vw,5.2rem);line-height:1.03;margin:0 0 24px;max-width:860px}
+    .hero-copy h1 em{font-style:normal;color:#79e4e4}
+    .dek{font-size:clamp(1rem,1.6vw,1.25rem);color:#c4d4da;max-width:710px;margin:0 0 34px;line-height:1.75}
+    .thesis{border-top:1px solid #2c4854;padding-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .thesis strong{display:block;color:#fff;font-size:1.03rem;margin-bottom:4px}.thesis span{font-size:.82rem;color:#8fa7b1}
+    .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#102834 0%,#0a151d 70%);padding:28px}
+    .hero-visual::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(85,210,214,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(85,210,214,.08) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,black,transparent)}
+    .substrate{position:relative;width:min(430px,100%);aspect-ratio:1.2;filter:drop-shadow(0 24px 36px rgba(0,0,0,.4))}
+    .substrate svg{width:100%;height:100%;display:block}
+    .caption{position:absolute;left:26px;right:26px;bottom:24px;color:#94adb7;font-size:.76rem;text-align:center}
+    .chapter{display:grid;grid-template-columns:220px minmax(0,1fr);gap:42px;padding:74px 0;border-bottom:1px solid var(--line)}
+    .chapter:last-child{border-bottom:0}
+    .rail{position:relative}
+    .rail-inner{position:sticky;top:92px}
+    .num{font:700 3.2rem/1 var(--serif);color:var(--cyan);opacity:.68}
+    .rail p{font-size:.82rem;color:var(--muted);margin:10px 0 0;max-width:170px}
+    h2{font-size:clamp(1.85rem,3vw,3rem);line-height:1.15;margin:0 0 14px}
+    .intro{font-size:1.1rem;color:var(--muted);max-width:780px;margin:0 0 32px}
+    h3{font-size:1.28rem;line-height:1.35;margin:34px 0 12px}
+    p{margin:0 0 16px}
+    .cite{display:inline-flex;align-items:center;justify-content:center;min-width:1.55em;height:1.55em;padding:0 .35em;margin-left:.18em;border-radius:50%;background:var(--cyan2);color:color-mix(in srgb,var(--ink) 88%,var(--cyan));text-decoration:none;font:700 .68rem/1 var(--sans);vertical-align:super}
+    .quote{font-family:var(--serif);font-size:1.4rem;line-height:1.58;padding:28px 30px;margin:34px 0;background:var(--navy);color:#e7f5f5;border-left:5px solid var(--cyan)}
+    .compare{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:28px 0}
+    .compare article{background:var(--paper);padding:24px}.compare article:nth-child(2){background:color-mix(in srgb,var(--cyan2) 42%,var(--paper))}
+    .compare h3{margin:0 0 14px;font-family:var(--sans);font-size:1.02rem}.compare .big{font:700 2rem/1.15 var(--serif);color:var(--cyan);margin-bottom:10px}.compare p{font-size:.87rem;color:var(--muted);margin:0}
+    .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0}
+    .metric{background:var(--paper);padding:22px;border-top:3px solid var(--cyan);box-shadow:var(--shadow)}
+    .metric b{font:700 1.65rem/1.2 var(--serif);display:block;margin-bottom:6px}.metric span{font-size:.82rem;color:var(--muted)}
+    .process{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:30px 0;border:1px solid var(--line)}
+    .step{position:relative;background:var(--paper);padding:24px 18px;min-height:150px;border-right:1px solid var(--line)}.step:last-child{border-right:0}
+    .step small{color:var(--cyan);font-weight:800;letter-spacing:.08em}.step b{display:block;margin:10px 0 7px}.step span{font-size:.8rem;color:var(--muted);line-height:1.55;display:block}
+    .step:not(:last-child)::after{content:"";position:absolute;right:-6px;top:36px;width:10px;height:10px;background:var(--paper);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:rotate(45deg);z-index:2}
+    .callout{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:20px 22px;background:var(--soft);margin:24px 0}
+    .callout .mark{width:38px;height:38px;border:1px solid var(--orange);color:var(--orange);display:grid;place-items:center;font-weight:800}
+    .callout b{display:block;margin-bottom:4px}.callout p{font-size:.9rem;color:var(--muted);margin:0}
+    .pipeline{display:grid;grid-template-columns:1fr 46px 1fr 46px 1fr;align-items:stretch;margin:30px 0}
+    .chain{background:var(--paper);padding:24px;border-top:4px solid var(--cyan)}
+    .chain h3{margin:0 0 14px;font:700 1.1rem var(--sans)}.chain ul{padding:0;margin:0;list-style:none}.chain li{padding:8px 0;border-top:1px solid var(--line);font-size:.88rem}.chain li:first-child{border-top:0}
+    .arrow{display:grid;place-items:center;color:var(--cyan);font-size:1.8rem}
+    .bottlenecks{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;counter-reset:b}
+    .bottle{background:var(--paper);padding:24px 24px 24px 74px;position:relative;min-height:150px}
+    .bottle::before{counter-increment:b;content:counter(b);position:absolute;left:22px;top:24px;width:34px;height:34px;border:1px solid var(--line);display:grid;place-items:center;font-weight:800;color:var(--cyan)}
+    .bottle h3{font:700 1rem var(--sans);margin:0 0 6px}.bottle p{font-size:.86rem;color:var(--muted);margin:0}
+    .timeline{position:relative;margin:34px 0 8px;padding-left:24px;border-left:2px solid var(--line)}
+    .era{position:relative;padding:4px 0 30px 26px}.era::before{content:"";position:absolute;left:-31px;top:7px;width:12px;height:12px;background:var(--paper);border:3px solid var(--cyan);border-radius:50%}.era:last-child{padding-bottom:4px}
+    .era time{font-weight:800;color:var(--cyan);font-size:.86rem}.era h3{font:700 1.04rem var(--sans);margin:3px 0 5px}.era p{font-size:.87rem;color:var(--muted);margin:0;max-width:760px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 20px}
+    .filter{border:1px solid var(--line);background:var(--paper);color:var(--muted);padding:8px 13px;cursor:pointer}.filter:hover,.filter.active{background:var(--navy2);border-color:var(--navy2);color:#effafa}
+    .stocks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .stock{background:var(--paper);padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:10px;align-content:start;border-top:3px solid var(--line)}
+    .stock.direct{border-top-color:var(--green)}.stock.spec{border-top-color:var(--yellow)}
+    .stock h3{font:700 1.03rem var(--sans);margin:0}.ticker{color:var(--cyan);font-weight:800}.tag{font-size:.72rem;padding:4px 7px;background:var(--soft);height:max-content;color:var(--muted)}
+    .stock p{grid-column:1/-1;font-size:.84rem;color:var(--muted);margin:0;line-height:1.58}.stock[hidden]{display:none}
+    .legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;margin-top:14px}.legend i{display:inline-block;width:10px;height:10px;margin-right:6px}.legend .g{background:var(--green)}.legend .y{background:var(--yellow)}
+    .risk-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:24px}.risk{padding:26px;background:var(--paper)}.risk h3{margin:0 0 12px}.risk ul{margin:0;padding-left:20px}.risk li{margin:8px 0;color:var(--muted);font-size:.9rem}.risk.anti{background:var(--navy);color:#fff}.risk.anti li{color:#b8cbd2}
+    .sources{columns:2;column-gap:36px;list-style:none;padding:0;counter-reset:src}.sources li{counter-increment:src;break-inside:avoid;display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:.82rem}.sources li::before{content:counter(src,decimal-leading-zero);font-weight:800;color:var(--cyan)}.sources a{text-decoration:none}.sources a:hover{text-decoration:underline}.sources small{display:block;color:var(--muted);margin-top:3px}
+    .open{background:var(--paper);padding:26px;margin-top:30px}.open h3{margin-top:0}.open ol{margin:0;padding-left:22px}.open li{margin:9px 0;color:var(--muted)}
+    .cmp-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:28px 0}.cmp-stage{background:var(--paper);padding:24px}.cmp-stage small{font-weight:800;color:var(--cyan);letter-spacing:.06em}.cmp-stage h3{font:700 1.02rem var(--sans);margin:8px 0}.cmp-stage p{font-size:.86rem;color:var(--muted);margin:0}.cmp-stage b{color:var(--ink)}
+    .temperature{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:28px 0}.temperature-main{padding:30px;background:var(--navy);color:#eefafa}.temperature-main strong{display:block;font:700 clamp(3rem,6vw,5rem)/1 var(--serif);color:#79e4e4}.temperature-main span{display:block;margin-top:8px;color:#b8cbd2}.activation{background:var(--paper);padding:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-content:center}.activation div{padding:14px 12px;border-top:2px solid var(--cyan)}.activation b{display:block;font:700 1.25rem var(--serif)}.activation span{font-size:.78rem;color:var(--muted)}
+    .criteria{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:26px 0}.criterion{background:var(--paper);padding:18px 16px;border-top:3px solid var(--cyan)}.criterion b{display:block;font-size:.9rem;margin-bottom:6px}.criterion span{display:block;color:var(--muted);font-size:.77rem;line-height:1.5}
+    .market-split{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.share{background:var(--paper);padding:18px}.share b{font:700 1.7rem var(--serif);display:block;color:var(--cyan)}.share span{font-size:.8rem;color:var(--muted)}.share i{display:block;height:5px;background:var(--soft);margin-top:14px;overflow:hidden}.share i::after{content:"";display:block;width:var(--w);height:100%;background:var(--cyan)}
+    .rank-list{display:grid;gap:10px;margin:26px 0}.rank-row{display:grid;grid-template-columns:46px minmax(150px,.55fr) minmax(0,1.45fr) auto;gap:16px;align-items:center;background:var(--paper);padding:17px 18px;border-left:4px solid var(--line)}.rank-row.top{border-left-color:var(--green)}.rank-no{font:700 1.45rem var(--serif);color:var(--cyan)}.rank-name b{display:block}.rank-name span{color:var(--cyan);font-size:.82rem;font-weight:800}.rank-reason{font-size:.84rem;color:var(--muted);line-height:1.55}.rank-level{font-size:.72rem;padding:5px 8px;background:var(--soft);color:var(--muted);white-space:nowrap}.rank-row.top .rank-level{background:color-mix(in srgb,var(--green) 14%,var(--paper));color:var(--green)}
+    .verdict{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0}.verdict article{padding:24px;background:var(--paper);border-top:3px solid var(--cyan)}.verdict article:last-child{border-top-color:var(--orange)}.verdict h3{font:700 1.05rem var(--sans);margin:0 0 8px}.verdict p{font-size:.87rem;color:var(--muted);margin:0}
+    .hypothesis-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:28px 0}.hypothesis-strip article{background:var(--paper);padding:22px}.hypothesis-strip b{display:block;font:700 1.08rem var(--sans);margin-bottom:7px}.hypothesis-strip span{font-size:.84rem;color:var(--muted)}.hypothesis-strip .yes b{color:var(--green)}.hypothesis-strip .reset b{color:var(--orange)}
+    .segment-table{border:1px solid var(--line);margin:28px 0}.segment-row{display:grid;grid-template-columns:150px 165px minmax(0,1fr) minmax(0,1fr);background:var(--paper);border-top:1px solid var(--line)}.segment-row:first-child{border-top:0}.segment-row>div{padding:16px 18px}.segment-row>div+div{border-left:1px solid var(--line)}.segment-name b{display:block}.segment-name span,.segment-stat span{display:block;color:var(--muted);font-size:.76rem;margin-top:4px}.segment-stat b{font:700 1.15rem var(--serif);color:var(--cyan)}.segment-copy{font-size:.82rem;color:var(--muted);line-height:1.55}.segment-copy strong{color:var(--ink)}
+    .mirror-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}.mirror-card{background:var(--paper);padding:22px;border-top:3px solid var(--cyan)}.mirror-card h3{font:700 1rem var(--sans);margin:0 0 7px}.mirror-card .years{display:block;color:var(--cyan);font:700 1.3rem var(--serif);margin-bottom:10px}.mirror-card p{font-size:.82rem;color:var(--muted);margin:0}.pattern-bar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--navy);color:#edfafa;margin:18px 0 32px}.pattern-bar div{padding:18px;border-left:1px solid #2c4854}.pattern-bar div:first-child{border-left:0}.pattern-bar b{display:block;color:#79e4e4;margin-bottom:3px}.pattern-bar span{font-size:.77rem;color:#a9bec6}
+    .candidate-lanes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}.candidate-lane{background:var(--paper);padding:24px}.candidate-lane h3{margin:0 0 14px;font:700 1.05rem var(--sans)}.candidate{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}.candidate:first-of-type{border-top:0;padding-top:0}.candidate-no{font:700 1.25rem var(--serif);color:var(--cyan)}.candidate b{display:block}.candidate small{display:block;color:var(--muted);font-size:.78rem;line-height:1.5;margin-top:4px}.candidate .status{display:inline-block;margin-top:7px;padding:2px 6px;background:var(--soft);color:var(--muted);font-size:.68rem}.candidate .status.verified{color:var(--green)}
+    .window-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:24px 0}.window{background:var(--paper);padding:18px 15px;border-top:4px solid var(--line)}.window.high{border-top-color:var(--green)}.window.mid{border-top-color:var(--yellow)}.window.low{border-top-color:var(--red)}.window b{display:block;font-size:.86rem;margin-bottom:6px}.window strong{display:block;font:700 1.3rem var(--serif);margin-bottom:7px}.window.high strong{color:var(--green)}.window.mid strong{color:var(--yellow)}.window.low strong{color:var(--red)}.window span{font-size:.75rem;color:var(--muted);line-height:1.45;display:block}
+    footer{max-width:1260px;margin:auto;padding:0 28px 48px;color:var(--muted);font-size:.78rem}
+    @media(max-width:900px){
+      main{padding:20px 18px 60px}.hero{grid-template-columns:1fr}.hero-copy{padding:42px 30px 30px}.hero-visual{min-height:340px}.chapter{grid-template-columns:1fr;gap:18px;padding:54px 0}.rail-inner{position:static;display:flex;align-items:baseline;gap:14px}.rail p{max-width:none;margin:0}.metric-grid{grid-template-columns:repeat(2,1fr)}.process{grid-template-columns:1fr 1fr}.step{border-bottom:1px solid var(--line)}.step:nth-child(2n){border-right:0}.step:last-child{grid-column:1/-1}.step::after{display:none}.pipeline{grid-template-columns:1fr}.arrow{height:40px;transform:rotate(90deg)}.sources{columns:1}.criteria{grid-template-columns:repeat(3,1fr)}.market-split{grid-template-columns:repeat(2,1fr)}.segment-row{grid-template-columns:130px 145px minmax(0,1fr)}.segment-row .segment-copy:last-child{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.mirror-grid{grid-template-columns:1fr}.window-grid{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(max-width:620px){
+      .topbar-inner{padding:8px 12px;display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}.navlink{text-align:center;padding:6px 3px;font-size:.78rem}.hero-copy{padding:34px 22px}.thesis{grid-template-columns:1fr;gap:12px}.hero-visual{min-height:300px}.caption{position:static;margin-top:6px}.metric-grid,.bottlenecks,.stocks,.risk-grid,.cmp-flow,.criteria,.market-split,.verdict,.hypothesis-strip,.candidate-lanes,.window-grid{grid-template-columns:1fr}.compare{grid-template-columns:1fr}.process{grid-template-columns:1fr}.step{border-right:0}.step:last-child{grid-column:auto}.stock{grid-template-columns:1fr}.tag{justify-self:start}.stock p{grid-column:auto}.hero{min-height:auto}.hero-visual{display:block}.substrate{margin:auto}.chapter{padding:46px 0}.num{font-size:2.4rem}.temperature{grid-template-columns:1fr}.activation{grid-template-columns:1fr 1fr 1fr}.rank-row{grid-template-columns:34px 1fr}.rank-reason,.rank-level{grid-column:2}.rank-level{justify-self:start}.segment-row{display:block;padding:16px 18px}.segment-row>div{padding:7px 0;border:0!important}.segment-row+ .segment-row{border-top:1px solid var(--line)}.pattern-bar{grid-template-columns:1fr 1fr}.pattern-bar div:nth-child(3){border-left:0;border-top:1px solid #2c4854}.pattern-bar div:nth-child(4){border-top:1px solid #2c4854}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+  <nav class="topbar" aria-label="章節導覽">
+    <div class="topbar-inner">
+      <a class="navlink active" href="#overview">核心判讀</a><a class="navlink" href="#fundamentals">基礎</a><a class="navlink" href="#process">製程</a><a class="navlink" href="#chain">供應鏈</a><a class="navlink" href="#bottleneck">瓶頸</a><a class="navlink" href="#cmp">CMP 假說</a><a class="navlink" href="#roadmap">時程</a><a class="navlink" href="#stocks">類股</a><a class="navlink" href="#sources">來源</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="hero-copy">
+        <div class="issue">先進封裝技術筆記 · CMP 黑馬研究更新 2026-10-06 CST · CoPoS 時程補充 2026-10-07 CST · BOE 15:1 更新 2026-10-07 CST</div>
+        <h1>玻璃跨過「翹曲之牆」，<em>量產仍卡在孔裡</em></h1>
+        <p class="dek">TGV 不是單純把 ABF 換成玻璃，而是把材料、成孔、金屬化、RDL 與面板級製造重新整合。短線的價值集中在設備與材料驗證；長線能否放量，取決於良率、可靠度與客戶認證。</p>
+        <div class="thesis">
+          <div><strong>60–75%</strong><span>報導中的現階段玻璃基板良率區間</span></div>
+          <div><strong>+30–50%</strong><span>相較有機基板的成本溢價估計</span></div>
+          <div><strong>2028+</strong><span>多數路線圖指向的關鍵放量窗</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="玻璃核心基板剖面示意">
+        <div class="substrate">
+          <svg viewBox="0 0 520 420" role="img" aria-label="玻璃核心、TGV 銅通孔與上下 RDL 的分層剖面">
+            <defs><linearGradient id="glass" x1="0" x2="1"><stop offset="0" stop-color="#1b5965"/><stop offset=".5" stop-color="#5db5bd"/><stop offset="1" stop-color="#163f4b"/></linearGradient><linearGradient id="copper" x1="0" x2="1"><stop stop-color="#a94825"/><stop offset=".5" stop-color="#ffb074"/><stop offset="1" stop-color="#9b3f20"/></linearGradient></defs>
+            <g transform="translate(35 45)">
+              <path d="M30 78 330 18 430 58 130 120Z" fill="#23404a" stroke="#75d8d8" stroke-width="2"/>
+              <path d="M30 78v34l100 42 300-62V58L130 120Z" fill="#102a35" stroke="#3c7781"/>
+              <g fill="#ff8a56"><path d="M82 86 290 45l8 3L90 90Z"/><path d="M160 112 370 70l8 3-210 43Z"/><path d="M120 99 222 79l7 3-102 21Z"/></g>
+              <path d="M30 137 330 78l100 41-300 63Z" fill="url(#glass)" opacity=".95" stroke="#7ee5e5" stroke-width="2"/>
+              <path d="M30 137v118l100 47 300-69V119l-300 63Z" fill="url(#glass)" stroke="#4aaab1" stroke-width="2"/>
+              <g fill="url(#copper)" stroke="#ffc09a" stroke-width="1">
+                <path d="M95 150 112 147v121l-17 4Z"/><path d="M180 133 197 130v121l-17 4Z"/><path d="M273 114 290 111v120l-17 4Z"/><path d="M360 98 377 95v118l-17 4Z"/>
+              </g>
+              <path d="M30 271 330 207l100 43-300 69Z" fill="#173742" stroke="#75d8d8" stroke-width="2"/>
+              <path d="M30 271v34l100 48 300-70v-33l-300 69Z" fill="#0e242d" stroke="#3c7781"/>
+              <g fill="#ff8a56"><path d="M75 283 280 240l8 4-205 45Z"/><path d="M165 310 375 263l8 4-210 48Z"/></g>
+              <g font-family="sans-serif" font-size="14" fill="#dff"><text x="6" y="69">RDL / ABF</text><text x="2" y="220">玻璃核心</text><text x="365" y="233" fill="#ffb074">TGV 銅通孔</text><text x="5" y="341">RDL / ABF</text></g>
+            </g>
+          </svg>
+          <p class="caption">示意圖：玻璃取代中央核心，上下增層仍可使用 ABF；TGV 負責垂直電性連接。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="fundamentals">
+      <aside class="rail"><div class="rail-inner"><div class="num">01</div><p>先理解材料物性，再談「取代」。</p></div></aside>
+      <div>
+        <h2>TGV 是垂直通道；玻璃核心才是結構變革</h2>
+        <p class="intro">玻璃核心基板將封裝載板中央較厚的有機核心換成玻璃；TGV（Through Glass Via）是穿過玻璃、經金屬化後連接上下層的通孔。兩者常被混稱，但一個是材料架構、一個是互連製程。<a class="cite" href="#s1">1</a></p>
+        <div class="metric-grid">
+          <div class="metric"><b>3–8</b><span>玻璃 CTE，ppm/°C，可依配方調整；矽約 2.6</span></div>
+          <div class="metric"><b>&lt;1 μm</b><span>玻璃平整度；報導中的有機基板翹曲約 ±5–10 μm</span></div>
+          <div class="metric"><b>&lt;2 μm</b><span>玻璃平面可支援的線寬／線距目標</span></div>
+          <div class="metric"><b>10×</b><span>Intel 公開說法中的互連密度提升</span></div>
+        </div>
+        <h3>為何 AI / HPC 把問題放大？</h3>
+        <p>GPU、HBM 與多晶片系統封裝愈做愈大，矽與有機材料在升降溫時的伸縮差異，會轉化為翹曲、微凸塊應力與對位難度。玻璃的 CTE 更接近矽、表面更平整，並可用大面板提高面積利用率；這三件事同時回應「更大封裝、更細線路、更高頻」的需求。報導估計 300 mm 圓晶圓面積利用率約 57%，方形大面板可超過 80%，但這是長期降本潛力，不等於現階段已達成低成本。<a class="cite" href="#s2">2</a><a class="cite" href="#s10">10</a></p>
+        <div class="quote">真正的投資命題不是「玻璃會不會取代 ABF」，而是：哪些環節能先把玻璃做成可重複、可驗證、可量產的半導體級平台。</div>
+        <div class="compare">
+          <article><h3>矽中介層 / TSV</h3><div class="big">最細</div><p>成熟且 CTE 匹配最佳；代價是成本最高、面積受 12 吋晶圓限制。</p></article>
+          <article><h3>玻璃中介層 / TGV</h3><div class="big">折衷點</div><p>細線、大面積、低損耗兼具潛力；但脆性、金屬化與生態系仍未成熟。</p></article>
+          <article><h3>有機 RDL / Fan-out</h3><div class="big">最低成本</div><p>大面板、成熟度較高；線路精細度與翹曲控制通常不及矽與玻璃。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="process">
+      <aside class="rail"><div class="rail-inner"><div class="num">02</div><p>孔打出來只是開始；孔內品質決定可靠度。</p></div></aside>
+      <div>
+        <h2>五段製程，一個最難的界面</h2>
+        <p class="intro">主流 LIDE 先用雷射改質玻璃，再以濕蝕刻移除改質區；相比直接燒蝕，可降低微裂紋並提升孔型一致性。LPKF 公開資料稱可達每秒數千孔、510×515 mm 面板累積精度 ±5 μm，深寬比 1:10–1:50；這些是廠商／論文揭露能力，量產表現仍需個別驗證。<a class="cite" href="#s17">17</a><a class="cite" href="#s18">18</a></p>
+        <div class="process">
+          <div class="step"><small>01 / GLASS</small><b>玻璃原片</b><span>CTE、厚度、缺陷密度與面板尺寸先定義製程窗口。</span></div>
+          <div class="step"><small>02 / VIA</small><b>雷射改質＋蝕刻</b><span>形成高深寬比、近垂直 TGV；抑制微裂紋與孔徑偏差。</span></div>
+          <div class="step"><small>03 / METAL</small><b>種子層＋電鍍</b><span>PVD／濺鍍後做 conformal 鍍壁或 filled 全孔填銅。</span></div>
+          <div class="step"><small>04 / BUILD-UP</small><b>RDL／ABF 增層</b><span>玻璃平整度支援細線路，但對位與低應力製程仍是關鍵。</span></div>
+          <div class="step"><small>05 / RELIABILITY</small><b>切割＋測試</b><span>低應力分割、熱循環、附著與電性可靠度驗證。</span></div>
+        </div>
+        <div class="callout"><div class="mark">!</div><div><b>金屬化是「孔內的良率黑箱」</b><p>孔口過早封住會形成空洞；銅與玻璃 CTE 不同會在熱循環中累積應力；種子層附著不足則可能剝離。報告引用的券商觀點把 TGV 金屬化填充與 RDL 同列為決定產品良率的核心瓶頸。<a class="cite" href="#s1">1</a><a class="cite" href="#s10">10</a></p></div></div>
+        <h3>LIDE 之外的路線</h3>
+        <p>飛秒／皮秒雷射輔助蝕刻（FLAE）以 3D 掃描改質，再用 KOH 或 HF 蝕刻；研究顯示玻璃成分與蝕刻液濃度對孔形的影響可能大於雷射參數。直接雷射燒蝕流程較直觀，卻更容易引入熱影響與微裂紋。不同路線不是單純比「打孔速度」，而是同時比較孔型、缺陷、面板累積精度、後續金屬化適配與總成本。<a class="cite" href="#s18">18</a></p>
+      </div>
+    </section>
+
+    <section class="chapter" id="chain">
+      <aside class="rail"><div class="rail-inner"><div class="num">03</div><p>價值鏈跨越玻璃、面板、載板與封測。</p></div></aside>
+      <div>
+        <h2>上游先吃驗證，中游承擔量產風險</h2>
+        <p class="intro">玻璃基板不是單一產業的延伸：原片來自特種玻璃，成孔借用雷射與面板加工，金屬化與 RDL 回到半導體／載板規格，最後由 OSAT 與晶片客戶完成可靠度與系統驗證。</p>
+        <div class="pipeline">
+          <div class="chain"><h3>上游｜材料與設備</h3><ul><li><b>玻璃：</b>Corning、AGC、Schott、NEG、DNP</li><li><b>成孔：</b>LPKF、Coherent、鈦昇、東捷</li><li><b>濺鍍／電鍍：</b>Manz、友威科、川寶</li><li><b>檢測／化學：</b>蔚華科、TASMIT、晶呈科技</li></ul></div>
+          <div class="arrow">→</div>
+          <div class="chain"><h3>中游｜基板與玻璃加工</h3><ul><li><b>專注廠：</b>Absolics、SEMCO、DNP、LG Innotek</li><li><b>載板：</b>Ibiden、Shinko、AT&amp;S、欣興、南電、景碩</li><li><b>面板／玻璃：</b>群創、友達、TPK-KY、BOE</li><li><b>IDM／Foundry：</b>Intel、TSMC CoPoS</li></ul></div>
+          <div class="arrow">→</div>
+          <div class="chain"><h3>下游｜封測與應用</h3><ul><li><b>OSAT：</b>ASE、Amkor、矽品、力成</li><li><b>晶片／雲端：</b>NVIDIA、AMD、Apple、Broadcom、AWS</li><li><b>應用：</b>AI/HPC、資料中心、HBM、CPO、車用、Micro LED</li></ul></div>
+        </div>
+        <h3>台灣可能的分工</h3>
+        <p>財訊快報於 2026-09-30 整理的路徑是：Corning／AGC／NEG／Schott／DNP 供應玻璃原片 → 群創、友達進行玻璃加工與 TGV 成孔 → 欣興、南電、景碩處理上下層 ABF 壓合 → 日月光、矽品、力成、台積電完成後段封測。這是媒體整理的產業分工框架，不代表各公司已取得量產訂單。<a class="cite" href="#s12">12</a></p>
+      </div>
+    </section>
+
+    <section class="chapter" id="bottleneck">
+      <aside class="rail"><div class="rail-inner"><div class="num">04</div><p>所有優勢，最後都要通過良率與成本。</p></div></aside>
+      <div>
+        <h2>六道量產關卡</h2>
+        <p class="intro">公開報導中的玻璃基板良率約 60–70%，另有初期量產 70–75% 的說法；成熟 ABF 報導值約 80–90% 或更高。數字口徑並不完全一致，但方向相同：玻璃還沒進入成熟成本曲線。<a class="cite" href="#s7">7</a><a class="cite" href="#s32">32</a></p>
+        <div class="bottlenecks">
+          <div class="bottle"><h3>脆性與微裂紋</h3><p>搬運、鑽孔、切割與熱循環都可能放大裂紋；SeWaRe 會沿板面擴展，破片率報導比有機材料高 5–10%。</p></div>
+          <div class="bottle"><h3>孔型與吞吐量</h3><p>高深寬比、孔徑、垂直度、位置精度與每秒產能要同時達標；大面板還要控制累積誤差。</p></div>
+          <div class="bottle"><h3>金屬化與 RDL</h3><p>銅填充空洞、附著、銅—玻璃熱應力，以及細線路對位共同決定電性與可靠度良率。</p></div>
+          <div class="bottle"><h3>設備生態系</h3><p>面板設備不必然符合半導體潔淨、精度與可靠度；玻璃搬運也需要新的自動化方案。</p></div>
+          <div class="bottle"><h3>成本曲線</h3><p>現階段成本溢價估約 30–50%；大面板高利用率是潛在解方，前提是良率與稼動率足夠。</p></div>
+          <div class="bottle"><h3>認證與商業模型</h3><p>客戶 qualification 時間長；專線投資由誰承擔、訂單是否足以攤提，仍是載板廠保守的原因。</p></div>
+        </div>
+        <div class="callout"><div class="mark">≠</div><div><b>ABF 不會立即消失</b><p>玻璃核心外側仍可使用 ABF 增層。報告另引述 2026 年 ABF 供需緊張與漲價訊息；這一方面提高替代誘因，另一方面也說明玻璃架構短期仍與 ABF 共存，而非完全取代。<a class="cite" href="#s22">22</a></p><p>郭明錤：CoPoS 載板仍需 ABF 膜——玻璃只是中間芯層，上下增層與訊號互聯仍由 ABF 承擔，「玻璃取代 ABF」說法不準確。伯恩斯坦（2026/5/29）：ABF 載板 2025–2028 需求 CAGR 22%、供給僅 12%，2027 年起供不應求；上游膜材 2026 Q2 成本上漲約三成。短線反而是 ABF 缺貨在替玻璃加速。<a class="cite" href="#s71">71</a></p></div></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="cmp">
+      <aside class="rail"><div class="rail-inner"><div class="num">05</div><p>填銅不是終點；表面能否回到可做 RDL 的平面，才是量產閘門。</p></div></aside>
+      <div>
+        <h2>CMP 深挖：誰能把「孔裡的銅」磨成可量產的平面？</h2>
+        <p class="intro">TGV 填銅後，CMP 必須移除表面過量銅與種子／阻障層，同時保住孔內銅柱與脆性玻璃。這不是單純的研磨：銅、阻障層、玻璃三種材料的機械與化學反應不同，任何選擇比、壓力或溫度偏差，都可能留下殘銅、碟形凹陷、侵蝕與刮傷，進一步壓縮後段 RDL 的微影與接合窗口。<a class="cite" href="#s34">34</a><a class="cite" href="#s35">35</a></p>
+
+        <h3>三段式，不是一次磨到底</h3>
+        <div class="cmp-flow">
+          <article class="cmp-stage"><small>STEP 1 / BULK CU</small><h3>高速去除厚銅</h3><p>晶圓級專利的典型條件為移除率 <b>&gt;6000 Å/min</b>、下壓 ≥2.5 psi；TGV 的銅厚達數十 μm，時間與熱累積更難控制。<a class="cite" href="#s37">37</a></p></article>
+          <article class="cmp-stage"><small>STEP 2 / CLEAR</small><h3>受控清除殘銅</h3><p>典型移除率 ≥3000–4000 Å/min、下壓 ≤1.5 psi，在阻障層前收斂。Cu:barrier 選擇比太高會加劇 dishing，太低則可能留殘銅。<a class="cite" href="#s37">37</a></p></article>
+          <article class="cmp-stage"><small>STEP 3 / BARRIER</small><h3>露出玻璃／介電層</h3><p>以高選擇比或近非選擇性配方清除阻障層，並把表面交給 RDL。上述條件源自晶圓級銅 CMP，不能視為 TGV 的直接配方。</p></article>
+        </div>
+
+        <div class="callout"><div class="mark">↕</div><div><b>矽 TSV 的 30 年配方庫，不能等比例搬到玻璃</b><p>TSV 常見孔徑約 5–10 μm；TGV 多為 20–100 μm，特徵寬度放大使 dishing 絕對量級上升。基材也從 Si／SiO₂ 變成玻璃，且製造型態由 12 吋晶圓轉向 510×515 mm 面板，壓力、供液、翹曲與搬運都是新的耦合問題。不同玻璃成分還會改變附著與熱行為，「換玻璃等於換製程」。<a class="cite" href="#s35">35</a><a class="cite" href="#s46">46</a></p></div></div>
+
+        <h3>溫度是被低估的製程旋鈕</h3>
+        <div class="temperature">
+          <div class="temperature-main"><strong>≈30°C</strong><span>實驗中 Cu／Ta／SiO₂ 移除率收斂到約 500 Å/min，接近 1:1:1 選擇比；這是論文條件，不是現成 TGV 量產配方。<a class="cite" href="#s36">36</a></span></div>
+          <div class="activation">
+            <div><b>151.7</b><span>Cu 活化能<br>kJ/mol</span></div>
+            <div><b>29.9</b><span>Ta 活化能<br>kJ/mol</span></div>
+            <div><b>8.75</b><span>SiO₂ 活化能<br>kJ/mol</span></div>
+          </div>
+        </div>
+        <p>銅對溫度最敏感。TGV 的厚銅意味更長研磨時間與更大溫升；若只調研磨液而不鎖住溫度，選擇比會在製程中漂移，低 dishing 的窗口就難以維持。<a class="cite" href="#s36">36</a></p>
+
+        <h3>RDL 真正在意的五個交付指標</h3>
+        <div class="criteria">
+          <div class="criterion"><b>殘銅清除</b><span>場區殘留會造成層間短路。</span></div>
+          <div class="criterion"><b>Via 中心 dishing</b><span>過深會提高接觸電阻並縮小對焦餘裕。</span></div>
+          <div class="criterion"><b>WIWNU / TTV</b><span>決定整片 RDL 線寬與厚度一致性。</span></div>
+          <div class="criterion"><b>翹曲</b><span>過大將妨礙真空吸附與微影套刻。</span></div>
+          <div class="criterion"><b>刮傷</b><span>直接轉化為漏電與可靠度失效。</span></div>
+        </div>
+
+        <h3>耗材錢往哪裡流？</h3>
+        <div class="market-split" aria-label="2025 年 CMP 耗材營收結構">
+          <div class="share"><b>58.3%</b><span>研磨液 Slurry</span><i style="--w:58.3%"></i></div>
+          <div class="share"><b>27.4%</b><span>研磨墊 Pad</span><i style="--w:27.4%"></i></div>
+          <div class="share"><b>9.8%</b><span>修整器 Conditioner</span><i style="--w:9.8%"></i></div>
+          <div class="share"><b>4.5%</b><span>其他／後清洗</span><i style="--w:4.5%"></i></div>
+        </div>
+        <p>以 2025 年市場營收口徑，研磨液確實超過耗材的一半；研磨液＋研磨墊合計約 85.7%。但全球前五大廠合計占約 65–70%，配方 know-how、磨粒團聚控制與客戶認證週期共同構成高門檻。TECHCET 估 2025 年研磨液＋研磨墊市場約 36 億美元；這是全球 wafer CMP 市場背景，不是 TGV 單獨市場規模。<a class="cite" href="#s38">38</a><a class="cite" href="#s39">39</a></p>
+
+        <h3>先驗證命題：「研磨老手會贏」大致成立，但只成立一半</h3>
+        <div class="hypothesis-strip">
+          <article class="yes"><b>完全成立｜鑽石碟</b><span>磨粒、結合劑與 pad 修整直接延續，玻璃基板沒有改寫這套能力；中砂是最乾淨的台灣證據。</span></article>
+          <article><b>部分成立｜Slurry／Pad</b><span>膠體、磨粒與 PU 配方有用，但玻璃＋銅＋阻障層需要重做選擇比，既有 recipe 不能直接搬。</span></article>
+          <article class="reset"><b>近乎重置｜面板機台</b><span>510×515 mm 方形 panel 的均勻性、邊緣效應與搬運是新題；既有晶圓裝機量護城河暫時變薄。</span></article>
+        </div>
+
+        <div class="segment-table" aria-label="CMP 五環節競爭格局">
+          <div class="segment-row"><div class="segment-name"><b>研磨液 Slurry</b><span>極高認證黏性</span></div><div class="segment-stat"><b>約 US$18.7 億</b><span>2024 估值；Fujifilm 約 31%</span></div><div class="segment-copy"><strong>老手優勢：</strong>磨粒分散、配方 IP、每道製程共同開發；單一產品驗證約 12–24 個月。</div><div class="segment-copy"><strong>優勢止步：</strong>Cu／barrier／glass 是新材料組合；ceria 玻璃化學反而讓光學拋光廠有相鄰性。<a class="cite" href="#s49">49</a><a class="cite" href="#s50">50</a><a class="cite" href="#s56">56</a></div></div>
+          <div class="segment-row"><div class="segment-name"><b>研磨墊 Pad</b><span>Pad–slurry 協同</span></div><div class="segment-stat"><b>前五大 93%</b><span>DuPont 逾 50%</span></div><div class="segment-copy"><strong>老手優勢：</strong>PU 孔隙、溝槽與壽命控制；耗材壽命僅 45–75 小時，認證後替換誘因低。</div><div class="segment-copy"><strong>優勢止步：</strong>panel 尺寸放大是新工藝，但材料平台仍可延伸，窗口只算半開。<a class="cite" href="#s51">51</a></div></div>
+          <div class="segment-row"><div class="segment-name"><b>鑽石碟 Conditioner</b><span>技術可直接轉移</span></div><div class="segment-stat"><b>前五大約 90%</b><span>前二合計約 60%</span></div><div class="segment-copy"><strong>老手優勢：</strong>金剛石磨粒、結合劑與 CVD 工藝直接決定缺陷率。</div><div class="segment-copy"><strong>優勢止步：</strong>幾乎沒有；pad 仍需修整，因此這一環最像「舊王直接收租」。<a class="cite" href="#s53">53</a></div></div>
+          <div class="segment-row"><div class="segment-name"><b>CMP 機台</b><span>製程設備，不是研磨機</span></div><div class="segment-stat"><b>AMAT 65–70%</b><span>Ebara 約 20%</span></div><div class="segment-copy"><strong>老手優勢：</strong>多區壓力、終點檢測、清洗整合與服務網；晶圓機台壽命約 5–10 年。</div><div class="segment-copy"><strong>優勢止步：</strong>面板級尚無量產標準機；連 Applied／Ebara 也須重做平台，這是最大重置窗。<a class="cite" href="#s52">52</a><a class="cite" href="#s69">69</a></div></div>
+          <div class="segment-row"><div class="segment-name"><b>Post-CMP 清洗</b><span>整套缺陷解法</span></div><div class="segment-stat"><b>約 US$2.1 億</b><span>前三大約 65%</span></div><div class="segment-copy"><strong>老手優勢：</strong>與 slurry／pad／Cu-low-k 協同；Entegris、Merck 等跨環節整合。</div><div class="segment-copy"><strong>優勢止步：</strong>市場小且需要整套配方，新進者最難靠單點產品切入。<a class="cite" href="#s54">54</a></div></div>
+        </div>
+
+        <h3>玻璃把哪三道護城河切斷？</h3>
+        <div class="bottlenecks">
+          <div class="bottle"><h3>材料斷層</h3><p>玻璃硬脆、銅柔軟，還夾著阻障層；要去乾淨表面銅又不能過磨玻璃，選擇比與 dishing 配方都要重做。Corning 專利以 50 μm 孔徑、100 μm 間距、300 μm 深度的填銅 TGV 經 CMP 平坦化，證明問題尺度已不同於一般晶圓線寬。<a class="cite" href="#s55">55</a></p></div>
+          <div class="bottle"><h3>尺寸斷層</h3><p>TGV pitch 通常小於 100 μm，缺陷容忍度可能放寬；但從 300 mm 圓片轉成 510×515 mm 方形面板，大面積均勻性、邊緣效應與翹曲一起變成主角。</p></div>
+          <div class="bottle"><h3>製程斷層</h3><p>面板 CMP 對所有人都新。Applied 的 Opta 仍以 wafer 為主，Ebara 也只在合作聯盟布局 panel-level；既有裝機量不等於已有量產 recipe。<a class="cite" href="#s69">69</a></p></div>
+          <div class="bottle"><h3>仍能轉移</h3><p>ceria 玻璃拋光化學、銅 CMP 化學、機械平台工程與鑽石碟修整仍有價值；其中修整器的可轉移性最高。<a class="cite" href="#s56">56</a></p></div>
+        </div>
+
+        <h3>中國鏡像：黑馬不是彎道超車，而是十年工程</h3>
+        <div class="mirror-grid">
+          <article class="mirror-card"><h3>鼎龍股份｜墊 → 磨粒 → 液</h3><span class="years">2012 → 約 10 年</span><p>由碳粉材料平台切入 CMP pad，再往上游攻高純矽、氧化鋁、氧化鈰等磨粒；仙桃基地規劃研磨粒子 1 萬噸／年、拋光液 2 萬噸／年，累計投入逾 14 億人民幣。關鍵不是「會磨」，而是高純無機合成、表面改性與膠體化學能複用。<a class="cite" href="#s57">57</a></p></article>
+          <article class="mirror-card"><h3>安集科技｜人才移植＋第一客戶</h3><span class="years">2006 → 2019</span><p>Cabot 背景團隊把 know-how 帶回，先以中芯國際做戰略客戶；2016–2018 年中芯占營收 60–66%。2026 H1 研發 2.46 億人民幣、占營收 16.13%，授權發明專利 312 項。這條路的核心是長期共同開發，不是一次配方突破。<a class="cite" href="#s58">58</a><a class="cite" href="#s59">59</a></p></article>
+          <article class="mirror-card"><h3>華海清科｜學研 IP＋整機產業化</h3><span class="years">2013 → 2026 千台</span><p>清華以 30 項 CMP 核心技術作價入股，2014 年推出中國首台 12 吋商業機型，2026 年第 1000 台出機。其 2025 年營收 99.08% 來自中國內地；本次未找到「台積電南京訂單」公開佐證，因此不採用。<a class="cite" href="#s60">60</a></p></article>
+        </div>
+        <div class="pattern-bar"><div><b>至少 10 年</b><span>從立項到可見規模</span></div><div><b>源頭 know-how</b><span>材料平台、龍頭人才或學研 IP</span></div><div><b>第一個 fab</b><span>願意給長週期驗證機會</span></div><div><b>重資本</b><span>產線、研發與品質系統同步投入</span></div></div>
+
+        <h3>台灣：理論贏家與真正黑馬分開看</h3>
+        <div class="candidate-lanes">
+          <section class="candidate-lane" aria-label="既有贏家"><h3>已站在 CMP 鏈上的贏家</h3>
+            <div class="candidate"><div class="candidate-no">1</div><div><b>中砂 1560｜鑽石碟</b><small>全球前二，與 3M 合計約 60%；2026 Q2 最大客戶先進製程占鑽石碟營收 63%，3nm／2nm 各 22%。技術直接轉移，是勝率最高的一環；但單家公司精確全球市占仍未公開，減薄砂輪也仍在驗證。2026/10/1 收盤站上 1,000 元、躋身千金股；Q2 毛利率 40.05% 突破四成、EPS 3.49 元。</small><span class="status verified">已驗證</span><a class="cite" href="#s61">61</a><a class="cite" href="#s41">41</a></div></div>
+            <div class="candidate"><div class="candidate-no">2</div><div><b>京鼎 3413｜CMP 次系統</b><small>法說產品線明列 CMP Equip. 模組。若 Applied／Ebara 推出 panel 機台，京鼎更可能以模組供應商切入，而非自造品牌整機；優點是路徑現實，代價是議價力受整機廠約束。</small><span class="status verified">已驗證</span><a class="cite" href="#s62">62</a></div></div>
+            <div class="candidate"><div class="candidate-no">3</div><div><b>智勝科技｜CMP 拋光墊</b><small>未上市；2002 年創立，QYResearch 列為全球 CMP pad 主要廠商之一，是本土少數具量產能力者。panel 尺寸 pad 是機會，但營收、客戶結構與規模不透明。</small><span class="status verified">已驗證／未上市</span><a class="cite" href="#s63">63</a></div></div>
+          </section>
+          <section class="candidate-lane" aria-label="黑馬候選"><h3>相鄰能力最強的黑馬</h3>
+            <div class="candidate"><div class="candidate-no">1</div><div><b>弘塑 3131｜設備路線</b><small>單晶圓清洗、金屬蝕刻、化鍍與流體處理，等於看得懂 CMP 機台的一半；但缺拋光頭多區壓力與終點檢測。沒有公開 CMP 計畫，若現在立項，合理仍需 5–8 年。</small><span class="status">推測</span><a class="cite" href="#s64">64</a></div></div>
+            <div class="candidate"><div class="candidate-no">2</div><div><b>長興 1717｜Pad 材料路線</b><small>PU／合成樹脂是多孔拋光墊的材料起點；但本次未找到半導體 CMP 計畫、專利或客戶訊號，從零到認證估需 5 年以上。</small><span class="status">推測</span></div></div>
+            <div class="candidate"><div class="candidate-no">3</div><div><b>晶呈科 4768｜TGV 場景路線</b><small>已布局 TGV 相關材料，竹北 6 條產線預計 2027 Q3 試量產；現有方向是氣體／剝離液，不是 CMP。它是需求場景觀察指標，不是現成受惠股。</small><span class="status verified">TGV 已驗證／CMP 未驗證</span><a class="cite" href="#s65">65</a></div></div>
+            <div class="candidate"><div class="candidate-no">4</div><div><b>亞洲光學 3019｜玻璃端路線</b><small>有數十年光學玻璃與 ceria 拋光量產經驗；但光學面形與半導體奈米平坦度、缺陷控制之間仍有巨大鴻溝，且沒有公開 CMP 計畫。</small><span class="status">推測</span><a class="cite" href="#s66">66</a></div></div>
+          </section>
+        </div>
+
+        <div class="callout"><div class="mark">0</div><div><b>最重要的空白：台灣上市櫃找不到已驗證的半導體級 CMP 研磨液製造商</b><p>台特化是特氣，上品是氟素樹脂內襯設備；三福化、中華化學亦未見相關揭露。這代表 slurry 是最有想像空間、也最不能只靠「化學材料股」標籤推論的環節。沒有磨粒工程、分散穩定、潔淨製造與 fab 認證，化學相鄰性不等於 CMP 能力。</p></div></div>
+
+        <h3>玻璃窗口到底開多大？</h3>
+        <div class="window-grid">
+          <article class="window high"><b>Panel CMP 機台</b><strong>最高</strong><span>無標準品、裝機護城河重置；仍需 5–8 年與大客戶綁定驗證。</span></article>
+          <article class="window high"><b>玻璃＋銅 Slurry</b><strong>次高</strong><span>配方早期、ceria 較公平；認證仍約需 2–4 年。</span></article>
+          <article class="window mid"><b>Panel 尺寸 Pad</b><strong>中</strong><span>尺寸放大是新工藝，但 DuPont 等材料平台仍有延伸優勢。</span></article>
+          <article class="window low"><b>鑽石碟</b><strong>低</strong><span>技術幾乎完整轉移；既有者尤其是中砂直接占優。</span></article>
+          <article class="window low"><b>Post-CMP Clean</b><strong>低</strong><span>巨頭配方延伸且與 slurry 協同，新進者難單點突破。</span></article>
+        </div>
+        <p>正方理由是：玻璃配方庫不轉移、panel 製程全新，且需求不只台積電，還有 Absolics、Samsung、BOE 等路線。反方是：Fujimi、Entegris、DuPont 等同時擁有材料平台與既有客戶，一旦市場明確，延伸速度可能更快。2026 年 9 月，BOE 被報導完成產線驗證並送客戶做晶片級測試；但新進者驗證仍可能漫長，中國太力科技同期仍表示 CMP slurry 處於研發驗證。<a class="cite" href="#s67">67</a><a class="cite" href="#s70">70</a></p>
+
+        <div class="verdict">
+          <article><h3>結論｜先押「已跨過認證牆」</h3><p>若只問台股誰最有優勢，排序是中砂、京鼎；前者擁有可直接轉移的修整耗材，後者已在設備次系統鏈。黑馬並非沒有，但「會研磨」只是必要條件，潔淨製造、缺陷控制與第一個願意陪跑的客戶才是充分條件。</p></article>
+          <article><h3>黑馬訊號｜看行動，不看題材</h3><p>弘塑要看 CMP 專利、產學合作或 pilot line；長興要看半導體材料 capex／專利；晶呈科要看 TGV 產品放量後是否跨入 CMP 化學；亞洲光學則只列長期觀察，不應預設短期切入。</p></article>
+        </div>
+
+        <div class="timeline">
+          <div class="era"><time>2026–2027</time><h3>立項與認證的最後窗口</h3><p>SKC／Absolics、BOE 等帶來小批量耗材驗證；任何黑馬若想碰到 2028 放量，這兩年必須出現專利、合作或 pilot line。<a class="cite" href="#s68">68</a></p></div>
+          <div class="era"><time>2027</time><h3>面板機台選型</h3><p>晶呈科竹北 TGV 廠預計試量產，台積電 CoPoS 試產線運轉；這是京鼎等設備鏈能否取得實單的觀察年。</p></div>
+          <div class="era"><time>2028</time><h3>設備先交、耗材後放</h3><p>若 CoPoS 如媒體路線圖進入量產，機台先形成交機高峰，slurry／pad／conditioner 再隨稼動率爬坡。</p></div>
+          <div class="era"><time>2029–2030</time><h3>耗材穩定成長窗</h3><p>多家 panel 廠與 Intel 路線持續推進；是否出現本土 slurry 供應商，取決於 2026–2027 是否已經開始認證。</p></div>
+        </div>
+        <div class="open"><h3>仍需保留的邊界</h3><ol><li>中砂單家公司精確全球市占沒有公開數字，僅能引用前二合計約 60%。</li><li>智勝科技未上市，營收規模與客戶結構不透明。</li><li>公開檢索未發現台灣廠商的玻璃 CMP 研發，不代表內部一定沒有進行。</li><li>市場份額多為第三方研究機構口徑，數字宜用於相對比較，不宜視為公司財報。</li><li>「華海清科取得台積電南京訂單」本次找不到公開佐證，未列入判斷。</li></ol></div>
+        <p><b>研究判讀：</b>玻璃窗口是真實的，但它是巨頭與新進者同時起跑，不是新進者獨享。中國案例顯示，黑馬要靠源頭能力、第一個客戶、重資本與至少十年；因此 2028 前最可能先受惠的，仍是已在鏈上的中砂與京鼎。研究為公開資訊彙整，不構成投資建議。</p>
+      </div>
+    </section>
+
+    <section class="chapter" id="roadmap">
+      <aside class="rail"><div class="rail-inner"><div class="num">06</div><p>路線圖很多，真正量產宣布很少。</p></div></aside>
+      <div>
+        <h2>2026–2030：從送樣到規模化的長坡</h2>
+        <p class="intro">目前較一致的產業節奏是：2026–2027 工程驗證與付費送樣，2027–2028 觀察良率爬坡與實單，2028 年後才有較大機會進入放量。以下日期多為目標或媒體報導，不是已實現的產能承諾。</p>
+        <div class="timeline">
+          <div class="era"><time>2025 年底</time><h3>Absolics：目標完成量產準備</h3><p>喬治亞廠投資約 3 億美元、年產能 12,000 m²；但「目標完成」的實際達成狀態仍列為待驗證。<a class="cite" href="#s3">3</a><a class="cite" href="#s5">5</a></p></div>
+          <div class="era"><time>2026–2030</time><h3>Intel：官方 HVM 區間</h3><p>Intel 2023 年公開玻璃基板，研發逾十年；部分媒體稱 2026 路線圖 on track，但確切 HVM 年份未有官方量產宣布。<a class="cite" href="#s2">2</a></p></div>
+          <div class="era"><time>2027 年後</time><h3>Samsung Electro-Mechanics：pilot line → 量產</h3><p>世宗 pilot line 已做原型；GlaSSEM JV 規劃 2027 下半年起自產 glass core 材料。<a class="cite" href="#s6">6</a></p></div>
+          <div class="era"><time>FY2028</time><h3>DNP：510×515 mm 面板量產目標</h3><p>久喜工廠 pilot line 於 2025 年 12 月分階段投產、2026 年初送樣；提供 filled 與 conformal 兩種 TGV 規格。<a class="cite" href="#s4">4</a></p></div>
+          <div class="era"><time>2028 Q4–2029 Q1</time><h3>TSMC CoPoS 玻璃版本：媒體報導目標窗</h3><p>310×310 mm 面板，報導稱與 Ibiden、群創合作；商業規模可能要到 2030 年後。此時程屬媒體／研究報導，非此頁確認的官方承諾。<a class="cite" href="#s11">11</a><a class="cite" href="#s9">9</a></p></div>
+          <div class="era"><time>2026–2029</time><h3>TSMC CoPoS：官方時程口徑</h3><p>台積電官方口徑（2026 Q1 法說首提、6/4 股東會確認）：CoPoS 試產線 2026 年 2 月進機、6 月建成；量產線 2028 年底–2029 年投用。魏哲家：「大概還需要兩到三年，量才會非常大。」2026 年資本支出 520–560 億美元，10%–20% 投向先進封裝及相關領域。<a class="cite" href="#s71">71</a></p></div>
+          <div class="era"><time>2028</time><h3>「先 BT 後 ABF」的漸進路徑</h3><p>調研觀點：台積電 2028 年導入玻璃基板採先替代 BT 載板、後替代 ABF 的漸進路徑；全行業至今沒有統一的材質、尺寸與工藝標準，這才是真正的瓶頸。<a class="cite" href="#s72">72</a></p></div>
+          <div class="era"><time>2028–2030</time><h3>中國面板廠：從小批量走向規模供貨</h3><p>BOE 已被報導完成認證並送客戶做晶片級測試；整體仍落後海外領先者約 1–2 年的產業估計。<a class="cite" href="#s7">7</a><a class="cite" href="#s9">9</a></p><p>京東方（IPC 2026）：首款 15:1 深寬比 TGV 玻璃芯基板（1mm 厚、67μm 孔徑、24 層積層），此前公開指標僅 10:1；目標 2027 年上半年達成量產投資決策、2028 年量產；摩根士丹利預估 2027 年投資約 50 億元人民幣、建月產 1.5 萬片（510×515mm）產線。TrendForce 引述韓媒稱 NVIDIA 要求基板供應商加速，導入時點可能提前至 2028 年前。上述多為媒體／機構預期口徑。<a class="cite" href="#s73">73</a></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="stocks">
+      <aside class="rail"><div class="rail-inner"><div class="num">07</div><p>按「驗證證據」分層，而不是只看概念標籤。</p></div></aside>
+      <div>
+        <h2>台股族群：直接進度、能力選擇權、題材延伸</h2>
+        <p class="intro">下列分類依研究報告所載的公開進度整理，並非買賣建議。2026–2027 年多數公司營收貢獻仍有限；單一設備出貨、送樣或專利，不等於已取得可持續量產訂單。<a class="cite" href="#s1">1</a><a class="cite" href="#s13">13</a><a class="cite" href="#s14">14</a></p>
+        <div class="controls" role="group" aria-label="類股篩選">
+          <button class="filter active" data-filter="all">全部</button><button class="filter" data-filter="equipment">設備</button><button class="filter" data-filter="material">材料</button><button class="filter" data-filter="substrate">載板</button><button class="filter" data-filter="glass">玻璃加工</button><button class="filter" data-filter="backend">封測／代工</button>
+        </div>
+        <div class="stocks" id="stockGrid">
+          <article class="stock direct" data-cat="material"><h3>晶呈科技 <span class="ticker">4768</span></h3><span class="tag">直接進度</span><p>GCB 由工程驗證進入量產；報告載明單月接單出貨達四位數片、規劃 2026 年底完成兩條 TGV 量產線，TGV 占營收約 2–3%。</p></article>
+          <article class="stock direct" data-cat="equipment"><h3>鈦昇 <span class="ticker">8027</span></h3><span class="tag">直接進度</span><p>布局雷射改質、ABF 鑽孔、電漿擴孔與玻璃切割；報告稱已進入台日系載板客戶供應鏈。</p></article>
+          <article class="stock direct" data-cat="equipment"><h3>蔚華科 <span class="ticker">3055</span></h3><span class="tag">直接進度</span><p>TGV 雷射斷層與 SP7000G 微裂紋掃描；報告稱可在 20 分鐘掃描 510×515 mm 面板，顯著營收貢獻仍看 2028。</p></article>
+          <article class="stock direct" data-cat="equipment"><h3>群翊 <span class="ticker">6664</span></h3><span class="tag">直接進度</span><p>推出玻璃基板塗佈、壓膜、乾燥解決方案；屬製程設備端卡位。</p></article>
+          <article class="stock direct" data-cat="equipment"><h3>川寶 <span class="ticker">1595</span></h3><span class="tag">直接進度</span><p>成孔後 TGV 金屬化設備於 2026 年 7 月試機並接獲打樣需求；當時預估第四季挹注營收。</p></article>
+          <article class="stock spec" data-cat="equipment"><h3>東捷 <span class="ticker">8064</span></h3><span class="tag">技術方案</span><p>與工研院合作超短脈衝雷射改質＋濕式製程 TGV 加工方案；屬技術／驗證階段。</p></article>
+          <article class="stock spec" data-cat="equipment"><h3>友威科 <span class="ticker">3580</span></h3><span class="tag">能力延伸</span><p>真空濺鍍、電漿蝕刻等乾式製程可應用於玻璃基板；報告未載明量產訂單。</p></article>
+          <article class="stock spec" data-cat="glass"><h3>TPK-KY <span class="ticker">3673</span></h3><span class="tag">試產線</span><p>中壢 TGV 試產線於 2026 年 9 月初啟動，與封測業者合作載具／基板／中介層。</p></article>
+          <article class="stock spec" data-cat="glass"><h3>群創 <span class="ticker">3481</span></h3><span class="tag">客戶驗證</span><p>TGV 列入半導體藍圖；與台積電、Ibiden 驗證的說法來自媒體，董事長稱仍在客戶開發與驗證磨合。</p></article>
+          <article class="stock spec" data-cat="glass"><h3>友達 <span class="ticker">2409</span></h3><span class="tag">展示合作</span><p>與 Corning 展示 GCS，組合半導體級玻璃與友達 RDL；未等同正式量產。</p></article>
+          <article class="stock spec" data-cat="substrate"><h3>欣興 <span class="ticker">3037</span></h3><span class="tag">研發／審慎</span><p>與 2–3 家客戶客製研發；報告同時載明 2026 年 7 月法說認為 2030 年前商業量產仍有難度。</p></article>
+          <article class="stock spec" data-cat="substrate"><h3>南電 <span class="ticker">8046</span>／景碩 <span class="ticker">3189</span></h3><span class="tag">間接能力</span><p>具高階載板製造經驗，但研究報告未找到兩家公司明確公開的玻璃基板研發細節。</p></article>
+          <article class="stock spec" data-cat="substrate"><h3>臻鼎-KY <span class="ticker">4958</span></h3><span class="tag">早期表態</span><p>董事長稱不會缺席玻璃基板，同時表示談量產仍太早。</p></article>
+          <article class="stock spec" data-cat="backend"><h3>日月光投控 <span class="ticker">3711</span>／力成 <span class="ticker">6239</span></h3><span class="tag">下游選擇權</span><p>位於後段封測，受益需等待玻璃核心基板實際進入客戶封裝流程。</p></article>
+          <article class="stock spec" data-cat="backend"><h3>台積電 <span class="ticker">2330</span></h3><span class="tag">平台主導</span><p>CoPoS 驗證與整合角色；玻璃版本量產時程屬媒體報導，商業規模仍偏長期。</p></article>
+        </div>
+        <div class="legend"><span><i class="g"></i>報告載有實質產品、出貨、試機或供應鏈進度</span><span><i class="y"></i>能力相符／驗證中／尚未明確揭露量產訂單</span></div>
+        <div class="risk-grid">
+          <div class="risk"><h3>追蹤指標</h3><ul><li>客戶 qualification 是否轉為長單，而非持續付費送樣</li><li>510×515 mm 等大面板的破片率、TGV 缺陷率與 RDL 良率</li><li>設備是否從單機驗證進入重複採購、驗收與產能擴充</li><li>單位面積成本是否隨良率上升而接近有機基板</li></ul></div>
+          <div class="risk anti"><h3>反向驗證</h3><ul><li>Intel／Absolics 延後 HVM 或客戶認證</li><li>玻璃核心仍高度依賴 ABF，材料缺口拖慢擴產</li><li>面板廠良率無法跨入半導體可靠度門檻</li><li>概念股營收先行反映，但 TGV 占比仍停留低個位數</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="sources">
+      <aside class="rail"><div class="rail-inner"><div class="num">08</div><p>把「公司目標」和「已實現」分開閱讀。</p></div></aside>
+      <div>
+        <h2>來源與尚待驗證事項</h2>
+        <p class="intro">本頁為固定快照，根據研究報告所列 2024–2026 產業報導整理。來源多由搜尋索引讀取，並非全部逐頁即時開啟驗證；所有時程與數字應保留原報導的「目標、估計、傳聞、媒體整理」語氣。</p>
+        <ol class="sources">
+          <li id="s1"><a href="https://www.bnext.com.tw/article/91547/glass-substrate-concept-stocks-tgv" target="_blank" rel="noopener">數位時代｜2026 玻璃基板概念股盤點<small>定義、製程、台灣公司進度</small></a></li>
+          <li id="s2"><a href="https://www.trendforce.com/news/2023/09/22/news-glass-substrates-in-advanced-packaging-with-intel-leads-tsmc-quietly-innovates/" target="_blank" rel="noopener">TrendForce｜Glass Substrates in Advanced Packaging<small>Intel 路線圖、面板與互連密度</small></a></li>
+          <li id="s3"><a href="https://www.trendforce.com/news/2025/07/07/news-absolics-reportedly-ramps-up-glass-substrate-production-mass-production-expected-by-year-end/" target="_blank" rel="noopener">TrendForce｜Absolics Ramps Up Output<small>喬治亞廠、資金與客戶送樣</small></a></li>
+          <li id="s4"><a href="https://www.trendforce.com/news/2025/12/22/news-dnp-accelerates-tgv-glass-substrate-push-with-late-2025-pilot-line-early-2026-sample-shipments/" target="_blank" rel="noopener">TrendForce｜DNP Advances TGV<small>pilot line、面板規格、FY2028 目標</small></a></li>
+          <li id="s5"><a href="http://www.kedglobal.com/korean-chipmakers/newsView/ked202411220005" target="_blank" rel="noopener">KED Global｜Absolics receives grants<small>投資、產能與美國補助</small></a></li>
+          <li id="s6"><a href="http://www.techtimes.com/articles/327080/20260909/lg-innotek-shows-first-100mm-ai-substrate-samsung-brings-five-substrate-types-kpca.htm" target="_blank" rel="noopener">TechTimes｜LG Innotek / Samsung KPCA<small>SEMCO、GlaSSEM、LG Innotek 路線圖</small></a></li>
+          <li id="s7"><a href="https://www.techtimes.com/articles/327959/20260923/boe-completes-glass-core-substrate-qualification-ships-customers-chip-level-testing.htm" target="_blank" rel="noopener">TechTimes｜BOE Qualification<small>認證、良率與成本差距</small></a></li>
+          <li id="s8"><a href="https://www.ajupress.com/view/20260922180470192" target="_blank" rel="noopener">AJU Press｜Chinese Panel Makers<small>Absolics、SEMCO、面板廠動向</small></a></li>
+          <li id="s9"><a href="https://finance.biggo.com/news/ff970db4-cbf9-4cfc-9e87-e24c72909a84" target="_blank" rel="noopener">BigGo Finance｜Panel Makers Race Into Glass-Core<small>中國面板廠、製程整合與時程</small></a></li>
+          <li id="s10"><a href="https://finance.biggo.com/news/r6f1sJ4B6tLPsnrZsoCp" target="_blank" rel="noopener">BigGo Finance｜China Glass Substrate<small>LIDE、瓶頸、面板降本潛力</small></a></li>
+          <li id="s11"><a href="https://www.ainvest.com/news/glass-substrates-ai-packaging-bottleneck-crossed-2609/" target="_blank" rel="noopener">AInvest｜Glass Substrates &amp; AI Packaging<small>TSMC CoPoS 媒體時程</small></a></li>
+          <li id="s12"><a href="https://www.investor.com.tw/MobileHttps/content.asp?articleNo=14202609300109" target="_blank" rel="noopener">財訊快報｜玻璃基板供應鏈夯<small>台灣分工與載板廠態度</small></a></li>
+          <li id="s13"><a href="https://www.cmoney.tw/notes/note-detail.aspx?nid=1276799" target="_blank" rel="noopener">CMoney｜輝達評估導入玻璃基板<small>台灣供應鏈進度整理</small></a></li>
+          <li id="s14"><a href="https://news.cnyes.com/news/id/6604581" target="_blank" rel="noopener">鉅亨網｜蔚華科迎戰玻璃基板<small>檢測設備與營收時程觀察</small></a></li>
+          <li id="s15"><a href="https://statementdog.com/news/17644" target="_blank" rel="noopener">財報狗｜玻璃基板、TGV 新戰場<small>產業脈絡補充</small></a></li>
+          <li id="s16"><a href="https://www.atlaspcb.com/news/news-china-gcpa-glass-substrate-tgv-2026/" target="_blank" rel="noopener">AtlasPCB｜China Launches GCPA<small>物性、應用與標準化</small></a></li>
+          <li id="s17"><a href="https://www.thelec.net/news/articleView.html?idxno=14374" target="_blank" rel="noopener">The Elec｜LPKF LIDE equipment<small>LIDE 設備與產業採用</small></a></li>
+          <li id="s18"><a href="https://www.mdpi.com/2072-666X/17/7/796" target="_blank" rel="noopener">MDPI Micromachines｜Review of TGV Fabrication<small>TGV 成孔技術與 FLAE</small></a></li>
+          <li id="s19"><a href="http://imapsource.scholasticahq.com/api/v1/articles/74577-fabrication-of-panel-level-glass-substrates-with-complete-design-freedom-using-lide.pdf" target="_blank" rel="noopener">IMAPS 2022｜Panel-Level Glass with LIDE<small>速度、精度、深寬比</small></a></li>
+          <li id="s20"><a href="https://semiconductorinsight.com/blog/top-10-glass-core-substrates-for-semiconductor-packaging-market-companies/" target="_blank" rel="noopener">Semiconductor Insight｜Top Glass Core Companies<small>全球材料與載板玩家</small></a></li>
+          <li id="s21"><a href="https://goearth.in/2024/11/05/emerging-trends-and-key-markets-in-2-5d-and-3d-semiconductor-packaging-technologies/" target="_blank" rel="noopener">GoEarth / IDTechEx 觀點｜2.5D &amp; 3D Packaging<small>中介層分工觀點</small></a></li>
+          <li id="s22"><a href="https://news.lavx.hu/article/abf-substrates-in-data-center-silicon-solving-the-supply-crunch-beneath-every-ai-accelerator" target="_blank" rel="noopener">Lavx｜ABF Substrates Supply Crunch<small>ABF 供需與漲價報導</small></a></li>
+          <li id="s23"><a href="https://news.leodex.io/news/intel-lens-technology-explore-glass-substrate-packaging-partnership" target="_blank" rel="noopener">LeoDex｜Intel / Lens Technology<small>早期合作洽談報導</small></a></li>
+          <li id="s24"><a href="https://cryptobriefing.com/intel-lens-tech-glass-substrate-packaging/" target="_blank" rel="noopener">CryptoBriefing｜Intel &amp; Lens Tech<small>合作仍未簽約的佐證</small></a></li>
+          <li id="s25"><a href="https://news-span.org/intel-patent-embeds-microleds-in-chip-packaging-technology-may-enable-embedded-optical-interconnects-through-tgvs" target="_blank" rel="noopener">News-span｜Intel Patent / MicroLED<small>Intel 專利與 24 層展示</small></a></li>
+          <li id="s26"><a href="https://www.archynewsy.com/samsung-electro-mechanics-supplies-glass-substrate-samples-to-apple/" target="_blank" rel="noopener">ArchiNewsy｜Samsung Samples<small>客戶驗證媒體報導</small></a></li>
+          <li id="s27"><a href="https://www.koreanewswire.co.kr/newsRead.php?no=963515" target="_blank" rel="noopener">Korea Newswire｜DNP TGV GCS<small>DNP 技術與營運目標</small></a></li>
+          <li id="s28"><a href="https://www.tweaktown.com/news/99239/sk-group-leaving-rivals-in-developing-glass-substrates-for-ai-chip-packaging-made-the-usa/index.html" target="_blank" rel="noopener">TweakTown｜SK Group Glass Substrates<small>Absolics 喬治亞廠</small></a></li>
+          <li id="s29"><a href="https://www.openpr.com/news/4251108/united-states-glass-substrate-market-2025-industry" target="_blank" rel="noopener">OpenPR｜US Glass Substrate Market<small>檢測與玻璃材料供應商</small></a></li>
+          <li id="s30"><a href="https://www.businessresearchinsights.com/market-reports/through-glass-vias-tgv-substrate-market-106233" target="_blank" rel="noopener">Business Research Insights｜TGV Market<small>LPKF、JNTC × Toppan</small></a></li>
+          <li id="s31"><a href="https://markets.financialcontent.com/ibtimes/article/tokenring-2025-12-24-beyond-silicon-the-industrys-pivot-to-glass-substrates-for-ai-packaging" target="_blank" rel="noopener">FinancialContent / IBTimes｜Pivot to Glass<small>高頻、耐溫與面板級封裝</small></a></li>
+          <li id="s32"><a href="https://markets.financialcontent.com/malvern-online/article/tokenring-2026-1-7-breaking-the-warpage-wall-the-semiconductor-industry-pivots-to-glass-substrates-for-the-next-era-of-ai" target="_blank" rel="noopener">FinancialContent｜Breaking the Warpage Wall<small>破片、良率與自動化搬運</small></a></li>
+          <li id="s33"><a href="https://markets.financialcontent.com/minstercommunitypost/article/tokenring-2025-12-29-the-glass-frontier-intel-and-rapidus-lead-the-charge-into-the-next-era-of-ai-hardware" target="_blank" rel="noopener">FinancialContent｜The Glass Frontier<small>Rapidus 與產業趨勢</small></a></li>
+          <li id="s34"><a href="https://ontoinnovation.com/wp-content/uploads/2025/10/Rigorous-Analysis-of-TGVs_SemiDigest_Oct25.pdf" target="_blank" rel="noopener">Onto Innovation｜Rigorous Analysis of TGVs<small>填銅後 CMP、dishing 與面板均勻性挑戰</small></a></li>
+          <li id="s35"><a href="https://www.mdpi.com/2072-666X/17/6/720" target="_blank" rel="noopener">MDPI Micromachines｜TGV 製程整合回顧<small>異質介面、CMP 缺陷與流程整合</small></a></li>
+          <li id="s36"><a href="https://www.mdpi.com/1996-1944/18/19/4461" target="_blank" rel="noopener">MDPI Materials｜溫度控制與低 dishing CMP<small>活化能、30°C 與近等選擇比實驗</small></a></li>
+          <li id="s37"><a href="https://patents.google.com/patent/JP2016208005A/en" target="_blank" rel="noopener">JP2016208005A｜低 dishing 銅 CMP<small>三步驟研磨與晶圓級典型條件</small></a></li>
+          <li id="s38"><a href="https://dataintelo.com/report/cmp-consumables-market" target="_blank" rel="noopener">Dataintelo｜CMP Consumables Market<small>2025 耗材結構與市場集中度</small></a></li>
+          <li id="s39"><a href="https://www.semiconductor-digest.com/cmp-slurry-and-pads-market-set-for-6-growth/" target="_blank" rel="noopener">Semiconductor Digest / TECHCET｜CMP Slurry and Pads<small>2025 市場規模與材料供應趨勢</small></a></li>
+          <li id="s40"><a href="https://english.cw.com.tw/article/article.action?id=4573" target="_blank" rel="noopener">CommonWealth｜Taiwan’s CMP Pad Supplier<small>頌勝／智勝市場地位與客戶</small></a></li>
+          <li id="s41"><a href="https://www.ctee.com.tw/news/20261002700274-439901" target="_blank" rel="noopener">工商時報｜中砂、台特化營運進度<small>鑽石碟、N2 與先進封裝需求</small></a></li>
+          <li id="s42"><a href="https://www.ctee.com.tw/news/20260731700269-439901" target="_blank" rel="noopener">工商時報｜川寶 TGV 金屬化線<small>面板規格、試機與營收時程</small></a></li>
+          <li id="s43"><a href="https://www.ctee.com.tw/news/20260929701070-430503" target="_blank" rel="noopener">工商時報｜晶呈科技 TGV 擴產<small>竹北五廠與試量產規劃</small></a></li>
+          <li id="s44"><a href="https://www.ctee.com.tw/news/20260617700295-439901" target="_blank" rel="noopener">工商時報｜辛耘濕製程設備<small>2026–2027 產能與先進封裝需求</small></a></li>
+          <li id="s45"><a href="https://aics.chungwenliao.com/aic/download/2042" target="_blank" rel="noopener">弘塑公司簡報<small>單晶圓清洗、金屬化與濕製程能力</small></a></li>
+          <li id="s46"><a href="https://semiengineering.com/one-substrate-no-longer-rules-them-all/" target="_blank" rel="noopener">Semiconductor Engineering｜One Substrate No Longer Rules Them All<small>玻璃材料差異與製程重調</small></a></li>
+          <li id="s47"><a href="https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=83886118-ba0f-4383-8a78-146275cf4c65" target="_blank" rel="noopener">MoneyDJ｜頌勝營收追蹤<small>2026 年營收與半導體耗材動能</small></a></li>
+          <li id="s48"><a href="https://www.ctee.com.tw/news/20260910701804-430502" target="_blank" rel="noopener">工商時報｜晶呈科技營收與 TGV<small>TGV 營收占比與成長節奏</small></a></li>
+          <li id="s49"><a href="https://www.semiconductor-digest.com/semiconductor-cmp-pad-slurry-forecast/amp/" target="_blank" rel="noopener">Semiconductor Digest / TECHCET｜CMP pad &amp; slurry forecast<small>供應格局、材料市場與認證背景</small></a></li>
+          <li id="s50"><a href="http://www.skyquestt.com/report/cmp-slurry-market" target="_blank" rel="noopener">SkyQuest｜CMP Slurry Market<small>2024 研磨液市場規模與競爭格局</small></a></li>
+          <li id="s51"><a href="https://www.openpr.com/news/4064834/cmp-pads-research-cagr-of-6-8-during-the-forecast-period" target="_blank" rel="noopener">QYResearch via OpenPR｜CMP Pads<small>研磨墊前五大集中度與主要供應商</small></a></li>
+          <li id="s52"><a href="https://crackthemarket.substack.com/p/applied-materials-the-broadest-toolbox" target="_blank" rel="noopener">Crack the Market｜Applied Materials toolbox<small>Applied／Ebara CMP 設備份額估計</small></a></li>
+          <li id="s53"><a href="https://www.openpr.com/news/4534462/cmp-pad-conditioners-market-size-to-reach-usd-681m-by-2032" target="_blank" rel="noopener">QYResearch via OpenPR｜CMP Pad Conditioners<small>鑽石碟市場規模、集中度與主要廠商</small></a></li>
+          <li id="s54"><a href="https://www.openpr.com/news/4191712/post-cmp-cleaning-solutions-market-trends-the-market-size" target="_blank" rel="noopener">QYResearch via OpenPR｜Post-CMP Cleaning<small>後清洗市場規模與前三大集中度</small></a></li>
+          <li id="s55"><a href="https://patents.google.com/patent/US11760682B2/en" target="_blank" rel="noopener">Corning｜US11760682B2<small>填銅 TGV 尺寸與 CMP 平坦化案例</small></a></li>
+          <li id="s56"><a href="https://patents.google.com/patent/WO2010026792A1/en" target="_blank" rel="noopener">Fujimi｜WO2010026792A1<small>氧化鈰玻璃拋光漿料專利</small></a></li>
+          <li id="s57"><a href="https://stcn.com/article/detail/3630318.html" target="_blank" rel="noopener">證券時報｜鼎龍材料平台轉型<small>磨粒自主化、投資與產能路徑</small></a></li>
+          <li id="s58"><a href="https://img3.gelonghui.com/pdf/8d80d-5d4e932e-4e24-4961-8d58-319cbfc62f03.pdf" target="_blank" rel="noopener">方正證券｜安集科技 IPO 報告<small>創始團隊與早期客戶結構</small></a></li>
+          <li id="s59"><a href="https://finance.eastmoney.com/a/202608263855128510.html" target="_blank" rel="noopener">上海證券報｜安集 2026 H1<small>研發投入、營收與專利數</small></a></li>
+          <li id="s60"><a href="https://finance.eastmoney.com/a/202604233715241287.html" target="_blank" rel="noopener">財聯社｜華海清科第 1000 台<small>發展里程碑與中國內地營收占比</small></a></li>
+          <li id="s61"><a href="https://www.ctee.com.tw/news/20260918700291-439901" target="_blank" rel="noopener">工商時報｜中砂鑽石碟<small>先進製程占比、營收與減薄砂輪進度</small></a></li>
+          <li id="s62"><a href="https://www.foxsemicon.com/zh-cn/file/ir/zh/1130614_foxconn.pdf" target="_blank" rel="noopener">京鼎法說簡報｜CMP Equip.<small>CMP 設備模組與次系統產品線</small></a></li>
+          <li id="s63"><a href="https://www.youtube.com/watch?v=1XL-XDBIGAg" target="_blank" rel="noopener">智勝科技｜公司介紹<small>CMP、蝕刻清洗與研磨拋光耗材能力</small></a></li>
+          <li id="s64"><a href="https://aics.chungwenliao.com/aic/download/2042" target="_blank" rel="noopener">弘塑公司簡報<small>單晶圓清洗、化鍍與濕製程能力</small></a></li>
+          <li id="s65"><a href="https://www.ctee.com.tw/news/20260929701070-430503" target="_blank" rel="noopener">工商時報｜晶呈科 TGV 擴產<small>竹北產線與 2027 Q3 試量產目標</small></a></li>
+          <li id="s66"><a href="https://www.1111.com.tw/corp/2180015/" target="_blank" rel="noopener">亞洲光學｜公司資料<small>光學元件與玻璃研磨拋光量產背景</small></a></li>
+          <li id="s67"><a href="https://www.techtimes.com/articles/327959/20260923/boe-completes-glass-core-substrate-qualification-ships-customers-chip-level-testing.htm" target="_blank" rel="noopener">TechTimes｜BOE Glass Core Qualification<small>產線驗證與客戶晶片級測試</small></a></li>
+          <li id="s68"><a href="https://finance.biggo.com/news/r6f1sJ4B6tLPsnrZsoCp" target="_blank" rel="noopener">BigGo Finance｜Glass substrate roadmap<small>Intel、台積電、SKC、Samsung、BOE 時程彙整</small></a></li>
+          <li id="s69"><a href="https://market.us/report/chemical-mechanical-planarization-market/" target="_blank" rel="noopener">Market.us｜CMP Market<small>設備裝機量與 Ebara panel-level 布局</small></a></li>
+          <li id="s70"><a href="https://finance.eastmoney.com/a/202609173877158695.html" target="_blank" rel="noopener">財聯社｜太力科技 CMP 驗證進度<small>新進者研磨液仍處長週期研發驗證</small></a></li>
+          <li id="s71"><a href="https://www.eeo.com.cn/2026/0613/914487.shtml" target="_blank" rel="noopener">經濟觀察網｜台積電 CoPoS 布局<small>官方時程、資本支出與郭明錤 ABF 觀點</small></a></li>
+          <li id="s72"><a href="https://hao.cnyes.com/post/270872" target="_blank" rel="noopener">鉅亨號｜玻璃基板調研<small>「先 BT 後 ABF」導入路徑與行業標準缺失</small></a></li>
+          <li id="s73"><a href="https://hao.cnyes.com/post/270421" target="_blank" rel="noopener">鉅亨號 AI 速讀｜京東方 15:1 TGV 玻璃芯基板<small>IPC 2026 發布、量產投資決策與摩根士丹利預估</small></a></li>
+        </ol>
+        <div class="open"><h3>仍待回答的五個問題</h3><ol><li>Absolics 在 2025 年底的量產準備目標，實際完成到哪一階段？</li><li>Intel HVM 的確切年份與首個量產產品為何？</li><li>Shinko、AT&amp;S 的玻璃核心 pilot line 與量產時程為何？</li><li>台特化被市場點名的 TGV 產品究竟是什麼？</li><li>南電、景碩是否已投入玻璃核心研發、何時進入客戶驗證？</li></ol></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>研究型筆記｜固定資料快照；不構成投資建議。公司計畫與媒體報導可能變動，決策前應回查公司公告與法說。</footer>
+  <script>
+    (function(){
+      var progress=document.getElementById('progress');
+      var nav=Array.prototype.slice.call(document.querySelectorAll('.navlink'));
+      var sections=nav.map(function(a){return document.querySelector(a.getAttribute('href'));}).filter(Boolean);
+      function update(){
+        var d=document.documentElement;var max=d.scrollHeight-d.clientHeight;progress.style.width=(max?d.scrollTop/max*100:0)+'%';
+        var current=sections[0];sections.forEach(function(s){if(s.getBoundingClientRect().top<=120)current=s;});
+        nav.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+current.id);});
+      }
+      window.addEventListener('scroll',update,{passive:true});update();
+      document.querySelectorAll('.filter').forEach(function(btn){btn.addEventListener('click',function(){
+        document.querySelectorAll('.filter').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
+        var f=btn.getAttribute('data-filter');document.querySelectorAll('.stock').forEach(function(card){card.hidden=!(f==='all'||card.getAttribute('data-cat')===f);});
+      });});
+    })();
+  </script>
+</body>
+</html>
